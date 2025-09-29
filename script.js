@@ -1,4 +1,4 @@
-// 1) List of lines you want to show
+
 const lines = [
     "Establishing a secure connection…",
     "Verifying identity…",
@@ -6,37 +6,35 @@ const lines = [
     "Connection secured!"
 ];
 
-// 2) Settings (timings in milliseconds)
+
 const fadeInDuration = 1000;
 const displayDuration = 2000;
 const fadeOutDuration = 1000;
 
-// 3) State
 let currentIndex = 0;
 const el = document.getElementById("rotating-text");
 
-// 4) Function to show one line
+
 function showLine(index) {
     el.textContent = lines[index];
-    // fade in
+
     el.classList.add("fade-in");
     el.classList.remove("fade-out");
 
-    // after fade-in + displayDuration, start fade-out
+
     setTimeout(() => {
         el.classList.remove("fade-in");
         el.classList.add("fade-out");
     }, fadeInDuration + displayDuration);
 
-    // after full cycle, move to next
+
     setTimeout(() => {
         currentIndex = (currentIndex + 1) % lines.length;
         showLine(currentIndex);
     }, fadeInDuration + displayDuration + fadeOutDuration);
 }
 
-// 5) Kick it off
-// small delay to allow CSS to settle
+
 setTimeout(() => {
     showLine(currentIndex);
 }, 100);
@@ -74,6 +72,9 @@ const DAY_DURATION = TOTAL_CYCLE_TIME / 8; // 8 seconds per day
 // Array of floating animation classes
 const floatingClasses = ['floating', 'floating-alt1', 'floating-alt2'];
 
+// Array of random colors for text
+const textColors = ['#2DFE07', '#FFFD01', '#F60AF4', '#D9D9D9'];
+
 function createRandomText() {
     // Check if we've hit the limit
     if (textElements.length >= MAX_TEXT_ELEMENTS) {
@@ -102,10 +103,14 @@ function createRandomText() {
     // Random font size between 16px and 48px
     const fontSize = Math.random() * 32 + 12;
 
+    // Random color from the array
+    const randomColor = textColors[Math.floor(Math.random() * textColors.length)];
+
     // Apply styles
     textElement.style.left = x + 'px';
     textElement.style.top = y + 'px';
     textElement.style.fontSize = fontSize + 'px';
+    textElement.style.color = randomColor;
 
     // Add to container and tracking array
     randomContainer.appendChild(textElement);

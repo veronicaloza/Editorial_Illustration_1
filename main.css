@@ -4,34 +4,28 @@ html {
     margin: 0;
     padding: 0;
     height: 100%;
+    background-color: black;
 }
 
-h1 {
-    z-index: 1;
-    color: black;
-
-}
 
 .text-container {
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100%;
-    background: #ffffff;
+    background: #000000;
 }
 
-/* Base style for the text */
 #rotating-text {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 2rem;
-    color: #0004ff;
+    color: #F60AF4;
     opacity: 0;
     width: 300px;
-    /* we’ll trigger this animation via JS by toggling a class */
     transition: opacity 1s ease-in-out;
 }
 
-/* helper classes to fade in / fade out */
+
 .fade-in {
     opacity: 1;
 }
@@ -40,24 +34,20 @@ h1 {
     opacity: 0;
 }
 
-/* Random text container styles */
 .random-container {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: white;
+    background: rgb(0, 0, 0);
     pointer-events: none;
-    /* Allow clicks to pass through */
     z-index: 1000;
-    /* Ensure it's on top */
 }
 
-/* Individual random text phrases */
+
 .random-text {
     position: absolute;
-    color: blue;
     font-family: sans-serif;
     font-weight: bold;
     opacity: 0;
@@ -74,9 +64,9 @@ h1 {
     opacity: 0;
 }
 
-/* Floating animations */
+
 .random-text.floating {
-    animation: float 8s ease-in-out infinite;
+    animation: float 6s ease-in-out infinite;
 }
 
 @keyframes float {
@@ -99,7 +89,6 @@ h1 {
     }
 }
 
-/* Additional floating variations */
 .random-text.floating-alt1 {
     animation: floatAlt1 10s ease-in-out infinite;
 }
@@ -148,13 +137,10 @@ h1 {
     }
 }
 
-/* Timer display styles */
 .timer {
     position: fixed;
     top: 20px;
     right: 20px;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 10px;
     padding: 15px;
     z-index: 2000;
     min-width: 120px;
@@ -163,18 +149,47 @@ h1 {
 
 .timer-label {
     font-size: 16px;
-    color: #000000;
+    color: #ffffff;
     margin-bottom: 5px;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Courier New', Courier, monospace;
     text-transform: uppercase;
     letter-spacing: 1px;
 }
 
 #day-display {
-    font-size: 24px;
+    font-size: 12px;
     font-weight: bold;
-    color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
     margin-bottom: 10px;
-    font-family: sans-serif;
+    font-family: 'Courier New', Courier, monospace;
     text-align: center;
+}
+
+/* Z-INDEX HIERARCHY CLASSES */
+
+/* Level 1: Above background but below floating text (z-index: 100-900) */
+.layer-background-overlay {
+    z-index: 500;
+    position: relative;
+    /* or absolute/fixed as needed */
+}
+
+/* Level 2: Above floating text but below timer (z-index: 1100-1900) */
+.layer-above-text {
+    z-index: 1500;
+    position: relative;
+    /* or absolute/fixed as needed */
+}
+
+/* Level 3: Above timer - highest level (z-index: 2100+) */
+.layer-top {
+    z-index: 2500;
+    position: relative;
+    /* or absolute/fixed as needed */
+}
+
+/* Level 4: Modal/overlay level - for critical UI (z-index: 3000+) */
+.layer-modal {
+    z-index: 3000;
+    position: fixed;
 }
