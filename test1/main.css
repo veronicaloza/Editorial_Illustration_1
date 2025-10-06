@@ -33,10 +33,10 @@ body {
 .main-title {
     position: relative;
     top: 20px;
-    left: 31%;
+    left: 50%;
     transform: translateX(-50%);
     z-index: 2100;
-    text-align: left;
+    text-align: center;
     width: 80%;
     max-width: 1200px;
     margin-bottom: 30px;
@@ -47,7 +47,7 @@ body {
     font-family: "oculi-display", sans-serif;
     font-weight: 400;
     font-style: normal;
-    font-size: 3rem;
+    font-size: 2em;
     font-weight: bold;
     margin: 0;
     border-radius: 10px;
@@ -57,7 +57,7 @@ body {
 .subtitle {
     position: relative;
     top: 0px;
-    left: 37%;
+    left: 50%;
     transform: translateX(-50%);
     z-index: 2090;
     width: 70%;
@@ -68,6 +68,7 @@ body {
     font-family: "oculi-display", sans-serif;
     font-weight: 400;
     font-style: normal;
+    text-align: center;
     font-size: 18px;
     font-weight: normal;
     margin: 0;
@@ -152,7 +153,7 @@ body {
 
 @media (max-width: 1919px) and (min-width: 1200px) {
     .main-title h1 {
-        font-size: 3.5rem;
+        font-size: 2rem;
     }
 
     .subtitle h2 {
@@ -167,7 +168,7 @@ body {
 
 @media (max-width: 1199px) and (min-width: 768px) {
     .main-title h1 {
-        font-size: 2.8rem;
+        font-size: 1.5rem;
         padding: 20px 0px 0px 0px;
     }
 
@@ -344,7 +345,7 @@ body {
     top: 60%;
     transform: translateY(-50%);
     z-index: 2000;
-    height: 500px;
+    height: 400px;
     pointer-events: auto;
 
 }
@@ -371,8 +372,8 @@ body {
 }
 
 .circle {
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
     border: 2px solid #ffffff;
     transition: all 0.1s ease;
     border-radius: 20%;
