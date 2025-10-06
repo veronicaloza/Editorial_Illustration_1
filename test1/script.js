@@ -308,7 +308,7 @@ function updateProgress() {
 
 
     if (day !== currentDay) {
-        console.log(`Progress to Day ${day} (${virtualScrollPosition.toFixed(1)}% virtual scroll)`);
+        console.log(`📅 Progress to Day ${day} (${virtualScrollPosition.toFixed(1)}% virtual scroll)`);
         currentDay = day;
         updateTimeline();
 
@@ -333,7 +333,7 @@ function updateProgress() {
     const difference = targetTotal - currentTotal;
 
     if (difference > 0) {
-        ect
+
         const batchSize = Math.min(8, difference);
         for (let i = 0; i < batchSize; i++) {
             createRandomText();
@@ -373,7 +373,6 @@ function onWheel(event) {
 
     updateProgress();
 }
-
 
 let updateTimeout;
 function throttledUpdate() {
@@ -418,6 +417,7 @@ function handleNavigationClick(day) {
 function init() {
     console.log("Initializing wheel-based animation...");
 
+
     window.addEventListener('wheel', onWheel, { passive: false });
 
 
@@ -460,7 +460,6 @@ function init() {
     if (loginBtn) {
         loginBtn.addEventListener('click', () => {
             console.log('Login clicked');
-
             alert('Login functionality would be implemented here');
         });
     }
@@ -488,8 +487,8 @@ function init() {
     updateProgress();
 
     console.log("Ready! Use mouse wheel, arrow keys, or timeline to progress through the 8 days.");
-    console.log("Scroll down = progress forward, Scroll up = go backward");
-    console.log("Click timeline circles to jump to specific days");
+    console.log("   Scroll down = progress forward, Scroll up = go backward");
+    console.log("   Click timeline circles to jump to specific days");
 }
 
 
