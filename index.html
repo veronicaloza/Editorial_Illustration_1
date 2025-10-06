@@ -4,537 +4,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Human Design - Wired</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Georgia', serif;
-            background: #000;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        #container {
-            width: 2048px;
-            height: 2048px;
-            background: #fff;
-            position: relative;
-            overflow-y: scroll;
-            overflow-x: hidden;
-        }
-
-        /* Static WIRED header */
-        #header {
-            position: sticky;
-            top: 0;
-            background: #000;
-            color: #fff;
-            padding: 30px 60px;
-            z-index: 1000;
-            font-size: 48px;
-            font-weight: 900;
-            letter-spacing: 8px;
-            font-family: 'Arial Black', sans-serif;
-        }
-
-        #content {
-            padding: 60px;
-            font-size: 22px;
-            line-height: 1.8;
-            position: relative;
-        }
-
-        .title {
-            font-size: 52px;
-            font-weight: bold;
-            margin-bottom: 30px;
-            line-height: 1.2;
-        }
-
-        .author {
-            font-size: 18px;
-            color: #666;
-            margin-bottom: 40px;
-            font-style: italic;
-        }
-
-        p {
-            margin-bottom: 28px;
-            position: relative;
-        }
-
-        /* Progressive distortion classes */
-        .level-1 {
-            animation: subtle-shake 3s infinite;
-        }
-
-        .level-2 {
-            animation: medium-shake 2s infinite;
-            color: #1a1a1a;
-        }
-
-        .level-3 {
-            animation: heavy-shake 1s infinite;
-            filter: blur(0.5px);
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .level-4 {
-            animation: chaotic-movement 0.8s infinite;
-            filter: blur(1px);
-            color: #333;
-            text-shadow: -2px 2px 4px rgba(255, 0, 0, 0.3),
-                2px -2px 4px rgba(0, 0, 255, 0.3);
-        }
-
-        .level-5 {
-            animation: spiral 0.6s infinite, color-shift 2s infinite;
-            filter: blur(2px);
-            text-shadow: -3px 3px 6px rgba(255, 0, 0, 0.5),
-                3px -3px 6px rgba(0, 255, 0, 0.5),
-                0 0 10px rgba(255, 255, 255, 0.5);
-            letter-spacing: 2px;
-        }
-
-        .level-6 {
-            animation: insanity 0.4s infinite, color-chaos 1s infinite;
-            filter: blur(3px);
-            text-shadow: -5px 5px 10px rgba(255, 0, 0, 0.7),
-                5px -5px 10px rgba(0, 255, 0, 0.7),
-                0 0 20px rgba(255, 255, 255, 0.8);
-            letter-spacing: 4px;
-            transform-origin: center;
-        }
-
-        /* Voice echoes */
-        .voice-echo::before,
-        .voice-echo::after {
-            content: attr(data-text);
-            position: absolute;
-            left: 0;
-            opacity: 0.4;
-            pointer-events: none;
-        }
-
-        .voice-echo::before {
-            animation: echo-1 2s infinite;
-            color: rgba(255, 0, 0, 0.6);
-        }
-
-        .voice-echo::after {
-            animation: echo-2 2.5s infinite;
-            color: rgba(0, 0, 255, 0.6);
-        }
-
-        /* Hallucination layers */
-        .hallucination {
-            position: relative;
-        }
-
-        .hallucination::before {
-            content: attr(data-text);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            animation: hallucinate 1.5s infinite;
-            color: rgba(255, 0, 255, 0.5);
-            filter: blur(4px);
-            pointer-events: none;
-        }
-
-        /* Animations */
-        @keyframes subtle-shake {
-
-            0%,
-            100% {
-                transform: translate(0, 0);
-            }
-
-            25% {
-                transform: translate(1px, 0);
-            }
-
-            75% {
-                transform: translate(-1px, 0);
-            }
-        }
-
-        @keyframes medium-shake {
-
-            0%,
-            100% {
-                transform: translate(0, 0) rotate(0deg);
-            }
-
-            25% {
-                transform: translate(2px, 1px) rotate(0.5deg);
-            }
-
-            50% {
-                transform: translate(-1px, -2px) rotate(-0.5deg);
-            }
-
-            75% {
-                transform: translate(-2px, 1px) rotate(0.3deg);
-            }
-        }
-
-        @keyframes heavy-shake {
-
-            0%,
-            100% {
-                transform: translate(0, 0) rotate(0deg);
-            }
-
-            10% {
-                transform: translate(-3px, 2px) rotate(1deg);
-            }
-
-            30% {
-                transform: translate(3px, -2px) rotate(-1deg);
-            }
-
-            50% {
-                transform: translate(-2px, -3px) rotate(1.5deg);
-            }
-
-            70% {
-                transform: translate(2px, 3px) rotate(-1.5deg);
-            }
-
-            90% {
-                transform: translate(-3px, 2px) rotate(0.5deg);
-            }
-        }
-
-        @keyframes chaotic-movement {
-            0% {
-                transform: translate(0, 0) rotate(0deg) scale(1);
-            }
-
-            20% {
-                transform: translate(-5px, 3px) rotate(2deg) scale(1.02);
-            }
-
-            40% {
-                transform: translate(4px, -4px) rotate(-2deg) scale(0.98);
-            }
-
-            60% {
-                transform: translate(-3px, -5px) rotate(3deg) scale(1.01);
-            }
-
-            80% {
-                transform: translate(5px, 4px) rotate(-3deg) scale(0.99);
-            }
-
-            100% {
-                transform: translate(0, 0) rotate(0deg) scale(1);
-            }
-        }
-
-        @keyframes spiral {
-            0% {
-                transform: translate(0, 0) rotate(0deg) scale(1);
-            }
-
-            25% {
-                transform: translate(-8px, 5px) rotate(5deg) scale(1.05);
-            }
-
-            50% {
-                transform: translate(6px, -8px) rotate(-5deg) scale(0.95);
-            }
-
-            75% {
-                transform: translate(-7px, -6px) rotate(8deg) scale(1.03);
-            }
-
-            100% {
-                transform: translate(0, 0) rotate(0deg) scale(1);
-            }
-        }
-
-        @keyframes insanity {
-            0% {
-                transform: translate(0, 0) rotate(0deg) scale(1) skew(0deg);
-            }
-
-            10% {
-                transform: translate(-10px, 8px) rotate(10deg) scale(1.1) skew(5deg);
-            }
-
-            25% {
-                transform: translate(12px, -10px) rotate(-12deg) scale(0.9) skew(-5deg);
-            }
-
-            40% {
-                transform: translate(-8px, -12px) rotate(15deg) scale(1.08) skew(8deg);
-            }
-
-            55% {
-                transform: translate(10px, 10px) rotate(-18deg) scale(0.92) skew(-8deg);
-            }
-
-            70% {
-                transform: translate(-12px, 8px) rotate(20deg) scale(1.05) skew(10deg);
-            }
-
-            85% {
-                transform: translate(8px, -12px) rotate(-15deg) scale(0.95) skew(-10deg);
-            }
-
-            100% {
-                transform: translate(0, 0) rotate(0deg) scale(1) skew(0deg);
-            }
-        }
-
-        @keyframes color-shift {
-
-            0%,
-            100% {
-                color: #1a1a1a;
-            }
-
-            25% {
-                color: #4a0a0a;
-            }
-
-            50% {
-                color: #0a0a4a;
-            }
-
-            75% {
-                color: #0a4a0a;
-            }
-        }
-
-        @keyframes color-chaos {
-            0% {
-                color: #ff0000;
-            }
-
-            20% {
-                color: #00ff00;
-            }
-
-            40% {
-                color: #0000ff;
-            }
-
-            60% {
-                color: #ff00ff;
-            }
-
-            80% {
-                color: #ffff00;
-            }
-
-            100% {
-                color: #ff0000;
-            }
-        }
-
-        @keyframes echo-1 {
-
-            0%,
-            100% {
-                transform: translate(0, 0);
-                opacity: 0;
-            }
-
-            50% {
-                transform: translate(-10px, -10px);
-                opacity: 0.4;
-            }
-        }
-
-        @keyframes echo-2 {
-
-            0%,
-            100% {
-                transform: translate(0, 0);
-                opacity: 0;
-            }
-
-            50% {
-                transform: translate(10px, 10px);
-                opacity: 0.3;
-            }
-        }
-
-        @keyframes hallucinate {
-
-            0%,
-            100% {
-                transform: translate(0, 0) scale(1);
-                opacity: 0;
-            }
-
-            50% {
-                transform: translate(20px, -20px) scale(1.2);
-                opacity: 0.6;
-            }
-        }
-
-        /* Scrollbar styling */
-        #container::-webkit-scrollbar {
-            width: 12px;
-        }
-
-        #container::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-
-        #container::-webkit-scrollbar-thumb {
-            background: #888;
-        }
-
-        #container::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
-    </style>
+    <title>Human Design - Editorial Illustration</title>
+    <link rel="stylesheet" href="main.css">
 </head>
 
 <body>
-    <div id="container">
-        <div id="header">WIRED</div>
+    <!-- Scroll progress indicator -->
+    <div class="scroll-progress">
+        <div class="progress-bar" id="progress-bar"></div>
+    </div>
 
-        <div id="content">
-            <h1 class="title">Human Design Is Blowing Up. Following It Might Make You Leave Your Spouse.</h1>
-            <p class="author">A system that claims to decode your true nature is gaining millions of followers—and
-                upending lives in the process.</p>
+    <!-- Fixed header with title and subtitle -->
+    <div class="fixed-header">
+        <h1 class="main-title">Human Design Is Blowing Up. Following It Might Make You Leave Your Spouse</h1>
+        <p class="subtitle">Night hum on the island. An 8-day encounter with a Voice. A system is born.</p>
+    </div>
 
-            <p>Human Design is having a moment. The spiritual framework, which combines astrology, the I Ching,
-                Kabbalah, and quantum physics into a personality assessment system, has exploded across social media.
-            </p>
+    <!-- Day indicator -->
+    <div class="day-indicator" id="day-indicator">Day 1</div>
 
-            <p class="level-1">Millions of people are now consulting their "bodygraph"—a chart generated from birth data
-                that supposedly reveals your energy type, decision-making strategy, and life purpose.</p>
-
-            <p class="level-1">The system categorizes people into five types: Manifestors, Generators, Manifesting
-                Generators, Projectors, and Reflectors. Each type comes with prescribed strategies for making decisions
-                and living authentically.</p>
-
-            <p class="level-2">Proponents say it's transformative self-knowledge. Skeptics call it pseudoscience with
-                cult-like tendencies. But the real story lies in what happens when people start living by their chart.
-            </p>
-
-            <p class="level-2">Sarah, a 34-year-old marketing executive, discovered she was a "Projector"—a type that
-                supposedly needs to wait for invitations before taking action. Within months, she quit her job and ended
-                her engagement.</p>
-
-            <p class="level-3">"My chart said I was living out of alignment," she explains. "My career was too demanding
-                for my energy type. My relationship wasn't initiated correctly according to Human Design principles."
-            </p>
-
-            <p class="level-3 voice-echo"
-                data-text="Stories like Sarah's are increasingly common. The Human Design community is filled with testimonials of people making radical life changes based on their bodygraph readings.">
-                Stories like Sarah's are increasingly common. The Human Design community is filled with testimonials of
-                people making radical life changes based on their bodygraph readings.</p>
-
-            <p class="level-4">The system was created in 1987 by Alan Robert Krakower, who changed his name to Ra Uru Hu
-                after what he described as an eight-day mystical experience in which he received the knowledge from a
-                "Voice."</p>
-
-            <p class="level-4 voice-echo"
-                data-text="He claimed the Voice downloaded the entire Human Design system to him, providing intricate details about human energy mechanics and evolutionary biology.">
-                He claimed the Voice downloaded the entire Human Design system to him, providing intricate details about
-                human energy mechanics and evolutionary biology.</p>
-
-            <p class="level-5 hallucination"
-                data-text="The Voice speaks through the charts now. It tells you who you really are. What you're meant to do. Who you're meant to love.">
-                The Voice speaks through the charts now. It tells you who you really are. What you're meant to do. Who
-                you're meant to love.</p>
-
-            <p class="level-5 voice-echo hallucination"
-                data-text="Critics point out that Human Design makes unfalsifiable claims, uses scientific terminology incorrectly, and provides no peer-reviewed evidence for its assertions.">
-                Critics point out that Human Design makes unfalsifiable claims, uses scientific terminology incorrectly,
-                and provides no peer-reviewed evidence for its assertions.</p>
-
-            <p class="level-6 voice-echo hallucination"
-                data-text="But in the algorithm-driven attention economy, nuance doesn't matter. TikTok videos with millions of views promise that knowing your type will solve your problems.">
-                But in the algorithm-driven attention economy, nuance doesn't matter. TikTok videos with millions of
-                views promise that knowing your type will solve your problems.</p>
-
-            <p class="level-6 voice-echo hallucination"
-                data-text="The bodygraph becomes scripture. The Voice becomes louder. Your old life was wrong. Your new life awaits. Just follow the chart. Follow the chart. Follow.">
-                The bodygraph becomes scripture. The Voice becomes louder. Your old life was wrong. Your new life
-                awaits. Just follow the chart. Follow the chart. Follow.</p>
-
-            <p class="level-6 voice-echo hallucination"
-                data-text="And somewhere in the spiral, between the quantum mechanics that aren't quantum and the physics that isn't physics, people are leaving their spouses, quitting their jobs, abandoning their paths.">
-                And somewhere in the spiral, between the quantum mechanics that aren't quantum and the physics that
-                isn't physics, people are leaving their spouses, quitting their jobs, abandoning their paths.</p>
-
-            <p class="level-6 voice-echo hallucination"
-                data-text="All because a Voice in 1987 said it knew them better than they knew themselves.">All because
-                a Voice in 1987 said it knew them better than they knew themselves.</p>
+    <!-- Vertical timeline (left side) -->
+    <div class="vertical-timeline">
+        <div class="timeline-circles-vertical">
+            <div class="timeline-item-vertical" data-day="1">
+                <div class="circle" id="circle-1"></div>
+                <div class="day-label">Day 1</div>
+            </div>
+            <div class="timeline-item-vertical" data-day="2">
+                <div class="circle" id="circle-2"></div>
+                <div class="day-label">Day 2</div>
+            </div>
+            <div class="timeline-item-vertical" data-day="3">
+                <div class="circle" id="circle-3"></div>
+                <div class="day-label">Day 3</div>
+            </div>
+            <div class="timeline-item-vertical" data-day="4">
+                <div class="circle" id="circle-4"></div>
+                <div class="day-label">Day 4</div>
+            </div>
+            <div class="timeline-item-vertical" data-day="5">
+                <div class="circle" id="circle-5"></div>
+                <div class="day-label">Day 5</div>
+            </div>
+            <div class="timeline-item-vertical" data-day="6">
+                <div class="circle" id="circle-6"></div>
+                <div class="day-label">Day 6</div>
+            </div>
+            <div class="timeline-item-vertical" data-day="7">
+                <div class="circle" id="circle-7"></div>
+                <div class="day-label">Day 7</div>
+            </div>
+            <div class="timeline-item-vertical" data-day="8">
+                <div class="circle" id="circle-8"></div>
+                <div class="day-label">Day 8</div>
+            </div>
         </div>
     </div>
 
-    <script>
-        const container = document.getElementById('container');
-        const paragraphs = document.querySelectorAll('#content p');
+    <!-- Image positioned below subtitle -->
+    <div class="image-container">
+        <img src="Wired_Cover.jpg" alt="Wired Cover" class="main-image">
+    </div>
 
-        // Apply distortion levels based on scroll position
-        container.addEventListener('scroll', () => {
-            const scrollTop = container.scrollTop;
-            const scrollHeight = container.scrollHeight - container.clientHeight;
-            const scrollPercent = (scrollTop / scrollHeight) * 100;
+    <!-- Scrollable container for day progression -->
+    <div class="scroll-container">
+        <!-- 8 day sections for scroll tracking -->
+        <div class="day-section" data-day="1"></div>
+        <div class="day-section" data-day="2"></div>
+        <div class="day-section" data-day="3"></div>
+        <div class="day-section" data-day="4"></div>
+        <div class="day-section" data-day="5"></div>
+        <div class="day-section" data-day="6"></div>
+        <div class="day-section" data-day="7"></div>
+        <div class="day-section" data-day="8"></div>
+    </div>
 
-            paragraphs.forEach((p, index) => {
-                const pTop = p.offsetTop - container.offsetTop;
-                const pVisible = scrollTop + container.clientHeight;
+    <!-- Random text container (positioned below subtitle and image) -->
+    <div id="random-text-container" class="random-container"></div>
 
-                if (pTop < pVisible) {
-                    const distortionLevel = Math.floor((pTop / scrollHeight) * 100 / 14);
-
-                    // Remove existing classes
-                    p.classList.remove('level-1', 'level-2', 'level-3', 'level-4', 'level-5', 'level-6', 'voice-echo', 'hallucination');
-
-                    // Add progressive effects
-                    if (distortionLevel >= 1) p.classList.add('level-1');
-                    if (distortionLevel >= 2) {
-                        p.classList.remove('level-1');
-                        p.classList.add('level-2');
-                    }
-                    if (distortionLevel >= 3) {
-                        p.classList.remove('level-2');
-                        p.classList.add('level-3');
-                    }
-                    if (distortionLevel >= 4) {
-                        p.classList.remove('level-3');
-                        p.classList.add('level-4');
-                        if (!p.classList.contains('voice-echo')) {
-                            p.classList.add('voice-echo');
-                            p.setAttribute('data-text', p.textContent);
-                        }
-                    }
-                    if (distortionLevel >= 5) {
-                        p.classList.remove('level-4');
-                        p.classList.add('level-5');
-                        if (!p.classList.contains('hallucination')) {
-                            p.classList.add('hallucination');
-                        }
-                    }
-                    if (distortionLevel >= 6) {
-                        p.classList.remove('level-5');
-                        p.classList.add('level-6');
-                    }
-                }
-            });
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 
 </html>

@@ -1,82 +1,79 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body,
 html {
     margin: 0;
     padding: 0;
-    width: 2048px;
-    height: 2048px;
+    width: 100%;
+    height: 100vh;
     background-color: black;
-    overflow: hidden;
+    color: white;
+    font-family: 'Arial', sans-serif;
+    overflow-x: hidden;
+}
 
+/* Scroll container for day progression */
+.scroll-container {
+    width: 100%;
+    height: 800vh;
+    /* 8 days * 100vh each */
+    position: relative;
+}
+
+/* Fixed header with title and subtitle */
+.fixed-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.9);
+    padding: 20px;
+    text-align: center;
 }
 
 .main-title {
-    position: relative;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 2100;
-    text-align: center;
-    width: 80%;
-    max-width: 1200px;
-    margin-bottom: 30px;
-}
-
-.main-title h1 {
-    color: #ffffff;
-    font-family: "oculi-display", sans-serif;
-    font-weight: 400;
-    font-style: normal;
-    font-size: 4rem;
+    font-size: 28px;
     font-weight: bold;
-    margin: 0;
-    border-radius: 10px;
-    padding: 30px 0px 0px 0px;
+    margin-bottom: 15px;
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
 
 .subtitle {
-    position: relative;
-    top: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 2090;
-    text-align: center;
-    width: 70%;
-    max-width: 600px;
-    margin-bottom: 40px;
-}
-
-.subtitle h2 {
-    color: #cccccc;
-    font-family: "oculi-display", sans-serif;
-    font-weight: 400;
-    font-style: normal;
     font-size: 18px;
-    font-weight: normal;
-    margin: 0;
-    padding: 10px 15px;
+    color: #cccccc;
+    margin-bottom: 20px;
+    font-style: italic;
 }
 
-.image-container {
-    position: absolute;
-    z-index: 2080;
-    text-align: center;
-    top: 10px;
-    left: 0px;
-
+/* Day indicator */
+.day-indicator {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1100;
+    background: rgba(79, 13, 78, 0.8);
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
 }
 
-.main-image {
-    max-width: 300px;
-    max-height: 300px;
-}
-
-
+/* Vertical timeline on left side */
 .vertical-timeline {
     position: fixed;
     left: 30px;
     top: 50%;
     transform: translateY(-50%);
-    z-index: 2000;
+    z-index: 1050;
     height: 400px;
 }
 
@@ -99,28 +96,29 @@ html {
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    border: 2px solid #bfbfbf;
+    background: #333;
+    border: 2px solid #666;
     transition: all 0.3s ease;
     position: relative;
-    z-index: 2001;
+    z-index: 1051;
 }
 
 .circle.active {
-    background: #ffffff;
+    background: #4f0d4e;
     border-color: #ffffff;
+    box-shadow: 0 0 15px rgba(79, 13, 78, 0.8);
     transform: scale(1.2);
 }
 
 .circle.completed {
-    background: #ffffff;
-    border-color: #ffffff;
+    background: #4f0d4e;
+    border-color: #4f0d4e;
+    box-shadow: 0 0 10px rgba(79, 13, 78, 0.6);
 }
 
 .day-label {
     color: #ffffff;
-    font-family: "oculi-display", sans-serif;
-    font-weight: 400;
-    font-style: normal;
+    font-family: 'Courier New', Courier, monospace;
     font-size: 10px;
     margin-left: 10px;
     text-align: left;
@@ -129,45 +127,36 @@ html {
     white-space: nowrap;
 }
 
-
-.text-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    background: #000000;
+/* Image container positioned after subtitle */
+.image-container {
+    position: fixed;
+    top: 150px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 900;
+    text-align: center;
 }
 
-#rotating-text {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 2rem;
-    color: #4f0d4e;
-    opacity: 0;
-    width: 300px;
-    transition: opacity 1s ease-in-out;
-
+.main-image {
+    max-width: 250px;
+    max-height: 250px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
 }
 
-
-.fade-in {
-    opacity: 1;
-}
-
-.fade-out {
-    opacity: 0;
-}
-
+/* Random text container - positioned below header */
 .random-container {
     position: fixed;
     top: 0;
     left: 0;
-    width: 2048px;
-    height: 2048px;
-    background: rgb(0, 0, 0);
+    width: 100vw;
+    height: 100vh;
+    background: transparent;
     pointer-events: none;
-    z-index: 1000;
+    z-index: 500;
+    padding-top: 400px;
+    /* Space below subtitle and image */
 }
-
 
 .random-text {
     position: absolute;
@@ -180,7 +169,7 @@ html {
     text-align: center;
     width: 300px;
     word-wrap: break-word;
-    /* Glowing effect - reduced intensity */
+    /* Glowing effect */
     text-shadow:
         0 0 2px currentColor,
         0 0 4px currentColor,
@@ -190,7 +179,6 @@ html {
     will-change: transform, opacity;
     backface-visibility: hidden;
     transform: translateZ(0);
-    /* Force hardware acceleration */
 }
 
 .random-text.show {
@@ -240,6 +228,7 @@ html {
     }
 }
 
+/* Floating animations */
 .random-text.floating {
     animation: float 8s ease-in-out infinite;
 }
@@ -312,70 +301,27 @@ html {
     }
 }
 
-.timer {
+/* Scroll progress indicator */
+.scroll-progress {
     position: fixed;
-    top: 20px;
-    right: 20px;
-    padding: 15px;
-    z-index: 2000;
-    min-width: 120px;
-    text-align: center;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    z-index: 1200;
 }
 
-.timer-label {
-    font-size: 16px;
-    color: #ffffff;
-    margin-bottom: 5px;
-    font-family: 'Courier New', Courier, monospace;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(to right, #4f0d4e, #ffffff);
+    width: 0%;
+    transition: width 0.1s ease;
 }
 
-#day-display {
-    font-size: 12px;
-    font-weight: bold;
-    color: rgb(255, 255, 255);
-    margin-bottom: 10px;
-    font-family: 'Courier New', Courier, monospace;
-    text-align: center;
-}
-
-/* Z-INDEX HIERARCHY CLASSES */
-
-/* Level 1: Above background but below floating text (z-index: 100-900) */
-.layer-background-overlay {
-    z-index: 500;
+/* Day sections (invisible but used for scroll tracking) */
+.day-section {
+    height: 100vh;
+    width: 100%;
     position: relative;
-    /* or absolute/fixed as needed */
-}
-
-/* Level 2: Above floating text but below timer (z-index: 1100-1900) */
-.layer-above-text {
-    z-index: 1500;
-    position: relative;
-    /* or absolute/fixed as needed */
-}
-
-/* Level 3: Above timer - highest level (z-index: 2100+) */
-.layer-top {
-    z-index: 2500;
-    position: relative;
-    /* or absolute/fixed as needed */
-}
-
-/* Level 4: Modal/overlay level - for critical UI (z-index: 3000+) */
-.layer-modal {
-    z-index: 3000;
-    position: fixed;
-}
-
-/* IMAGE OVERLAY STYLES */
-.top-image {
-    position: fixed;
-    z-index: 1;
-    top: 5%;
-    left: 10%;
-    transform: translate(-50%, -50%);
-    max-width: 200px;
-    max-height: 200px;
 }
