@@ -1,0 +1,386 @@
+/* Make the container fill screen and center the text */
+body,
+html {
+    margin: 0;
+    padding: 0;
+    width: 2048px;
+    height: 2048px;
+    background-color: black;
+    overflow: hidden;
+    /* Prevent scrollbars */
+}
+
+/* Main Title Styling */
+.main-title {
+    position: relative;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2100;
+    text-align: center;
+    width: 80%;
+    max-width: 800px;
+    margin-bottom: 30px;
+}
+
+.main-title h1 {
+    color: #ffffff;
+    font-family: 'Arial', sans-serif;
+    font-size: 28px;
+    font-weight: bold;
+    margin: 0;
+    padding: 15px 20px;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 10px;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+/* Subtitle Styling */
+.subtitle {
+    position: relative;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2090;
+    text-align: center;
+    width: 70%;
+    max-width: 600px;
+    margin-bottom: 40px;
+}
+
+.subtitle h2 {
+    color: #cccccc;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 18px;
+    font-weight: normal;
+    margin: 0;
+    padding: 10px 15px;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 8px;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+}
+
+.image-container {
+    position: relative;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2080;
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.main-image {
+    max-width: 300px;
+    max-height: 300px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+/* Vertical Timeline Styling */
+.vertical-timeline {
+    position: fixed;
+    left: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2000;
+    height: 400px;
+}
+
+.timeline-circles-vertical {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+}
+
+.timeline-item-vertical {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 8px 0;
+}
+
+.circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #bfbfbf;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 2001;
+}
+
+.circle.active {
+    background: #ffffff;
+    border-color: #ffffff;
+    transform: scale(1.2);
+}
+
+.circle.completed {
+    background: #ffffff;
+    border-color: #ffffff;
+}
+
+.day-label {
+    color: #ffffff;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 10px;
+    margin-left: 10px;
+    text-align: left;
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+    white-space: nowrap;
+}
+
+
+.text-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background: #000000;
+}
+
+#rotating-text {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 2rem;
+    color: #4f0d4e;
+    opacity: 0;
+    width: 300px;
+    transition: opacity 1s ease-in-out;
+
+}
+
+
+.fade-in {
+    opacity: 1;
+}
+
+.fade-out {
+    opacity: 0;
+}
+
+.random-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 2048px;
+    height: 2048px;
+    background: rgb(0, 0, 0);
+    pointer-events: none;
+    z-index: 1000;
+}
+
+
+.random-text {
+    position: absolute;
+    font-family: sans-serif;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    pointer-events: none;
+    white-space: normal;
+    text-align: center;
+    width: 300px;
+    word-wrap: break-word;
+    /* Glowing effect - reduced intensity */
+    text-shadow:
+        0 0 2px currentColor,
+        0 0 4px currentColor,
+        0 0 6px currentColor;
+    filter: brightness(1.1);
+    /* Performance optimizations */
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    /* Force hardware acceleration */
+}
+
+.random-text.show {
+    opacity: 1;
+    animation: glow-pulse 3s ease-in-out infinite alternate;
+}
+
+@keyframes glow-pulse {
+    0% {
+        text-shadow:
+            0 0 2px currentColor,
+            0 0 4px currentColor,
+            0 0 6px currentColor;
+        filter: brightness(1.1);
+    }
+
+    100% {
+        text-shadow:
+            0 0 3px currentColor,
+            0 0 6px currentColor,
+            0 0 9px currentColor;
+        filter: brightness(1.2);
+    }
+}
+
+.random-text.hide {
+    opacity: 0;
+}
+
+/* Typewriter cursor effect */
+.random-text.typing::after {
+    content: '|';
+    animation: blink 1s infinite;
+    color: inherit;
+}
+
+@keyframes blink {
+
+    0%,
+    50% {
+        opacity: 1;
+    }
+
+    51%,
+    100% {
+        opacity: 0;
+    }
+}
+
+.random-text.floating {
+    animation: float 8s ease-in-out infinite;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translate3d(0, 0, 0) rotate(0deg);
+    }
+
+    25% {
+        transform: translate3d(15px, -10px, 0) rotate(0.5deg);
+    }
+
+    50% {
+        transform: translate3d(-8px, -18px, 0) rotate(-0.3deg);
+    }
+
+    75% {
+        transform: translate3d(-18px, 8px, 0) rotate(0.3deg);
+    }
+}
+
+.random-text.floating-alt1 {
+    animation: floatAlt1 12s ease-in-out infinite;
+}
+
+@keyframes floatAlt1 {
+
+    0%,
+    100% {
+        transform: translate3d(0, 0, 0) rotate(0deg);
+    }
+
+    33% {
+        transform: translate3d(-20px, 15px, 0) rotate(-0.5deg);
+    }
+
+    66% {
+        transform: translate3d(18px, -8px, 0) rotate(0.8deg);
+    }
+}
+
+.random-text.floating-alt2 {
+    animation: floatAlt2 14s ease-in-out infinite;
+}
+
+@keyframes floatAlt2 {
+
+    0%,
+    100% {
+        transform: translate3d(0, 0, 0) rotate(0deg);
+    }
+
+    20% {
+        transform: translate3d(12px, -15px, 0) rotate(0.4deg);
+    }
+
+    40% {
+        transform: translate3d(-15px, -3px, 0) rotate(-0.6deg);
+    }
+
+    60% {
+        transform: translate3d(8px, 12px, 0) rotate(0.2deg);
+    }
+
+    80% {
+        transform: translate3d(-12px, -8px, 0) rotate(-0.4deg);
+    }
+}
+
+.timer {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px;
+    z-index: 2000;
+    min-width: 120px;
+    text-align: center;
+}
+
+.timer-label {
+    font-size: 16px;
+    color: #ffffff;
+    margin-bottom: 5px;
+    font-family: 'Courier New', Courier, monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#day-display {
+    font-size: 12px;
+    font-weight: bold;
+    color: rgb(255, 255, 255);
+    margin-bottom: 10px;
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+}
+
+/* Z-INDEX HIERARCHY CLASSES */
+
+/* Level 1: Above background but below floating text (z-index: 100-900) */
+.layer-background-overlay {
+    z-index: 500;
+    position: relative;
+    /* or absolute/fixed as needed */
+}
+
+/* Level 2: Above floating text but below timer (z-index: 1100-1900) */
+.layer-above-text {
+    z-index: 1500;
+    position: relative;
+    /* or absolute/fixed as needed */
+}
+
+/* Level 3: Above timer - highest level (z-index: 2100+) */
+.layer-top {
+    z-index: 2500;
+    position: relative;
+    /* or absolute/fixed as needed */
+}
+
+/* Level 4: Modal/overlay level - for critical UI (z-index: 3000+) */
+.layer-modal {
+    z-index: 3000;
+    position: fixed;
+}
+
+/* IMAGE OVERLAY STYLES */
+.top-image {
+    position: fixed;
+    z-index: 1;
+    top: 5%;
+    left: 10%;
+    transform: translate(-50%, -50%);
+    max-width: 200px;
+    max-height: 200px;
+}
