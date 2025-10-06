@@ -88,7 +88,7 @@ function typewriterEffect(element, text, speed = 50) {
             if (speed < 16) {
                 requestAnimationFrame(typeChar);
             } else {
-                setTimeout(typeChar, speed + Math.random() * 20); // Reduced randomness
+                setTimeout(typeChar, speed + Math.random() * 20);
             }
         } else {
             element.classList.remove('typing');
@@ -99,7 +99,7 @@ function typewriterEffect(element, text, speed = 50) {
 }
 
 function createRandomText() {
-    console.log("📝 Creating random text...", textElements.length, "elements currently");
+    console.log("Creating random text...", textElements.length, "elements currently");
 
     const textElement = document.createElement('div');
     textElement.className = 'random-text';
