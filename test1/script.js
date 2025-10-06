@@ -1,12 +1,4 @@
 
-const lines = [
-    "Establishing a secure connection…",
-    "Verifying identity…",
-    "Encrypting data…",
-    "Connection secured!"
-];
-
-
 const fadeInDuration = 1000;
 const displayDuration = 2000;
 const fadeOutDuration = 1000;
@@ -78,10 +70,10 @@ const randomContainer = document.getElementById("random-text-container");
 let phraseIndex = 0;
 let currentDay = 1;
 let textElements = [];
-let virtualScrollPosition = 0; // Virtual scroll position (0-100)
+let virtualScrollPosition = 0;
 
 const floatingClasses = ['floating', 'floating-alt1', 'floating-alt2'];
-const textColors = ['#BCFAFB', '#FFF8E7', '#D3D3D3'];
+const textColors = ['#BFD5F3', '#DFE6F6', '#FDE8DF'];
 
 function typewriterEffect(element, text, speed = 50) {
     element.textContent = '';
@@ -92,7 +84,7 @@ function typewriterEffect(element, text, speed = 50) {
         if (i < text.length) {
             element.textContent += text.charAt(i);
             i++;
-            // Use requestAnimationFrame for better performance when possible
+
             if (speed < 16) {
                 requestAnimationFrame(typeChar);
             } else {
@@ -113,17 +105,24 @@ function createRandomText() {
     textElement.className = 'random-text';
     textElement.textContent = '';
     textElement.createdAt = Date.now();
-    textElement.day = currentDay; // Track which day this text belongs to
-
+    textElement.day = currentDay;
     const phraseToType = randomPhrases[phraseIndex];
 
-    // Generate text across the actual viewport (with max 2048px)
-    const viewportWidth = Math.min(window.innerWidth, 2048);
-    const viewportHeight = Math.min(window.innerHeight, 2048);
-    const x = Math.random() * (viewportWidth - 300) + 0; // Full width minus text width
-    const y = Math.random() * (viewportHeight - 100) + 50; // Full height with some margin
 
-    const fontSize = Math.random() * 20 + 14; // Slightly smaller range for better readability
+    const horizontalLine2 = document.querySelector('.horizontal-line-2');
+    const lineRect = horizontalLine2.getBoundingClientRect();
+
+
+    const contentAreaTop = lineRect.bottom + 20;
+    const contentAreaBottom = Math.min(window.innerHeight, 2048) - 50;
+    const contentAreaLeft = 20;
+    const contentAreaRight = Math.min(window.innerWidth, 2048) - 20;
+
+
+    const x = Math.random() * (contentAreaRight - contentAreaLeft - 300) + contentAreaLeft;
+    const y = Math.random() * (contentAreaBottom - contentAreaTop - 100) + contentAreaTop;
+
+    const fontSize = Math.random() * 20 + 14;
 
     const randomColor = textColors[Math.floor(Math.random() * textColors.length)];
 
@@ -131,10 +130,10 @@ function createRandomText() {
     textElement.style.top = y + 'px';
     textElement.style.fontSize = fontSize + 'px';
     textElement.style.color = randomColor;
-    textElement.style.width = '300px'; // Set fixed width
-    textElement.style.textAlign = 'center'; // Center text within the element
-    textElement.style.whiteSpace = 'normal'; // Allow text wrapping
-    textElement.style.wordWrap = 'break-word'; // Break long words if necessary
+    textElement.style.width = '300px';
+    textElement.style.textAlign = 'center';
+    textElement.style.whiteSpace = 'normal';
+    textElement.style.wordWrap = 'break-word';
 
     randomContainer.appendChild(textElement);
     textElements.push(textElement);
@@ -163,23 +162,23 @@ function removeOldestText() {
                 if (oldElement.parentNode) {
                     oldElement.parentNode.removeChild(oldElement);
                 }
-            }, 500); // Smooth fade out
+            }, 500);
         }
     }
 }
 
 function removeTextsFromDay(dayToRemove) {
-    // Remove all texts belonging to a specific day
+
     const textsToRemove = textElements.filter(el => el.day === dayToRemove);
 
     textsToRemove.forEach(textElement => {
-        // Remove from array
+
         const index = textElements.indexOf(textElement);
         if (index > -1) {
             textElements.splice(index, 1);
         }
 
-        // Remove from DOM
+
         if (textElement && textElement.parentNode) {
             textElement.classList.add('hide');
             setTimeout(() => {
@@ -191,12 +190,31 @@ function removeTextsFromDay(dayToRemove) {
     });
 
     if (textsToRemove.length > 0) {
-        console.log(`🗑️ Removed ${textsToRemove.length} texts from Day ${dayToRemove}`);
+        console.log(`Removed ${textsToRemove.length} texts from Day ${dayToRemove}`);
     }
 }
 
 function updateTimeline() {
-    // Update all circles based on current day
+
+    for (let i = 1; i <= 8; i++) {
+        const circle = document.getElementById(`circle-${i}`);
+        if (circle) {
+            circle.classList.remove('active', 'completed');
+
+            if (i < currentDay) {
+                circle.classList.add('completed');
+            } else if (i === currentDay) {
+                circle.classList.add('active');
+            }
+        }
+    }
+
+
+    updateNavigation();
+}
+
+function updateNavigation() {
+
     for (let i = 1; i <= 8; i++) {
         const circle = document.getElementById(`circle-${i}`);
         if (circle) {
@@ -211,55 +229,99 @@ function updateTimeline() {
     }
 }
 
-// Get the target number of texts for a given scroll position (0-100)
-// Only show current day and previous day (max 2 days)
+function addDayTransitionEffect(day) {
+
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.1);
+        z-index: 5000;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    `;
+
+    document.body.appendChild(overlay);
+
+
+    setTimeout(() => {
+        overlay.style.opacity = '1';
+    }, 10);
+
+    setTimeout(() => {
+        overlay.style.opacity = '0';
+        setTimeout(() => {
+            if (overlay.parentNode) {
+                overlay.parentNode.removeChild(overlay);
+            }
+        }, 300);
+    }, 200);
+
+
+    const activeCircle = document.getElementById(`circle-${day}`);
+    if (activeCircle) {
+        activeCircle.style.boxShadow = '0 0 20px rgba(255, 255, 255, 0.8)';
+        setTimeout(() => {
+            activeCircle.style.boxShadow = '';
+        }, 1000);
+    }
+}
+
+
 function getTargetTextsForPosition(scrollPercent) {
-    // Clamp between 0 and 100
+
     scrollPercent = Math.max(0, Math.min(100, scrollPercent));
 
-    // Calculate which day we're on (0-100% = days 1-8)
+
     const day = Math.min(8, Math.max(1, Math.floor(scrollPercent / 12.5) + 1));
 
-    // Progress within the current day (0-1)
+
     const dayProgress = (scrollPercent % 12.5) / 12.5;
 
-    // Texts to add per day (not cumulative)
-    const textsPerDay = [0, 15, 20, 30, 40, 50, 65, 80, 100];
 
-    // Calculate how many texts should be visible from previous day
+    const textsPerDay = [0, 5, 15, 35, 65, 110, 170, 250, 350];
+
+
     let prevDayTexts = 0;
     if (day > 1) {
         prevDayTexts = textsPerDay[day - 1];
     }
 
-    // Calculate how many texts should be visible from current day
+
     const currentDayTexts = Math.floor(textsPerDay[day] * dayProgress);
 
-    // Total is previous day (if exists) + current day progress
+
     const targetTotal = prevDayTexts + currentDayTexts;
 
     return { targetTotal, day, prevDayTexts, currentDayTexts };
 }
 
 function updateProgress() {
-    // Calculate target texts and day based on virtual scroll position
+
     const { targetTotal, day, prevDayTexts, currentDayTexts } = getTargetTextsForPosition(virtualScrollPosition);
 
     const previousDay = currentDay;
 
-    // Update current day if it changed
+
     if (day !== currentDay) {
-        console.log(`📅 Progress to Day ${day} (${virtualScrollPosition.toFixed(1)}% virtual scroll)`);
+        console.log(`Progress to Day ${day} (${virtualScrollPosition.toFixed(1)}% virtual scroll)`);
         currentDay = day;
         updateTimeline();
 
-        // Clean up texts from days that are too old (older than previous day)
+
+        addDayTransitionEffect(day);
+
+
         const oldestDayToKeep = Math.max(1, currentDay - 1);
         for (let d = 1; d < oldestDayToKeep; d++) {
             removeTextsFromDay(d);
         }
 
-        // Also clean up future days if we scrolled backward
+
         if (day < previousDay) {
             for (let d = day + 1; d <= 8; d++) {
                 removeTextsFromDay(d);
@@ -271,67 +333,94 @@ function updateProgress() {
     const difference = targetTotal - currentTotal;
 
     if (difference > 0) {
-        // Add texts (scrolling down)
-        const batchSize = Math.min(3, difference); // Add up to 3 at a time
+        ect
+        const batchSize = Math.min(8, difference);
         for (let i = 0; i < batchSize; i++) {
             createRandomText();
         }
-        console.log(`➕ Day ${currentDay}: Added ${batchSize} texts (${currentTotal} → ${textElements.length}/${targetTotal}) [Prev: ${prevDayTexts}, Curr: ${currentDayTexts}]`);
+        console.log(`Day ${currentDay}: Added ${batchSize} texts (${currentTotal} → ${textElements.length}/${targetTotal}) [Prev: ${prevDayTexts}, Curr: ${currentDayTexts}]`);
     } else if (difference < 0) {
-        // Remove texts (scrolling up)
-        const batchSize = Math.min(3, Math.abs(difference)); // Remove up to 3 at a time
+
+        const batchSize = Math.min(8, Math.abs(difference));
         for (let i = 0; i < batchSize; i++) {
             removeOldestText();
         }
-        console.log(`➖ Day ${currentDay}: Removed ${batchSize} texts (${currentTotal} → ${textElements.length}/${targetTotal}) [Prev: ${prevDayTexts}, Curr: ${currentDayTexts}]`);
+        console.log(`Day ${currentDay}: Removed ${batchSize} texts (${currentTotal} → ${textElements.length}/${targetTotal}) [Prev: ${prevDayTexts}, Curr: ${currentDayTexts}]`);
     }
 }
 
-// Handle wheel events (scroll gestures)
+
 function onWheel(event) {
     event.preventDefault();
 
-    // Normalize wheel delta across browsers
+
     let delta = event.deltaY || event.detail || event.wheelDelta;
 
-    // Convert to a consistent scale (positive = scroll down, negative = scroll up)
-    if (event.deltaMode === 1) { // DOM_DELTA_LINE
+
+    if (event.deltaMode === 1) {
         delta *= 33;
-    } else if (event.deltaMode === 2) { // DOM_DELTA_PAGE
+    } else if (event.deltaMode === 2) {
         delta *= 100;
     }
 
-    // Adjust virtual scroll position (scale the delta for smoother control)
-    // Each full scroll should move ~1.5% of total progress
-    const scrollSpeed = 4; // Adjust this to change sensitivity
+
+    const scrollSpeed = 4;
     virtualScrollPosition += (delta * scrollSpeed) / 100;
 
-    // Clamp between 0 and 100
+
     virtualScrollPosition = Math.max(0, Math.min(100, virtualScrollPosition));
 
-    // Update the animation
+
     updateProgress();
 }
 
-// Throttle updates for better performance
+
 let updateTimeout;
 function throttledUpdate() {
     if (!updateTimeout) {
         updateTimeout = setTimeout(() => {
             updateProgress();
             updateTimeout = null;
-        }, 50); // Update every 50ms max
+        }, 50);
     }
 }
 
-// Initialize
-function init() {
-    console.log("🚀 Initializing wheel-based animation...");
 
-    // Set up wheel listener (prevent actual scrolling)
+function handleNavigationClick(day) {
+
+    const targetScrollPosition = (day - 1) * 12.5;
+    const startPosition = virtualScrollPosition;
+    const distance = targetScrollPosition - startPosition;
+    const duration = 1000;
+    const startTime = Date.now();
+
+    function animateTransition() {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+
+
+        const easeInOutCubic = progress < 0.5
+            ? 4 * progress * progress * progress
+            : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+
+        virtualScrollPosition = startPosition + (distance * easeInOutCubic);
+        updateProgress();
+
+        if (progress < 1) {
+            requestAnimationFrame(animateTransition);
+        }
+    }
+
+    animateTransition();
+}
+
+
+function init() {
+    console.log("Initializing wheel-based animation...");
+
     window.addEventListener('wheel', onWheel, { passive: false });
 
-    // Also handle keyboard arrows for accessibility
+
     window.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowDown' || e.key === 'PageDown') {
             e.preventDefault();
@@ -352,17 +441,58 @@ function init() {
         }
     });
 
-    // Initialize timeline
+
+    for (let i = 1; i <= 8; i++) {
+        const timelineItem = document.querySelector(`.timeline-item-vertical[data-day="${i}"]`);
+        if (timelineItem) {
+            timelineItem.addEventListener('click', () => {
+                console.log(`Navigating to Day ${i}`);
+                handleNavigationClick(i);
+            });
+        }
+    }
+
+
+    const loginBtn = document.getElementById('login-btn');
+    const newsletterBtn = document.getElementById('newsletter-btn');
+    const subscribeBtn = document.getElementById('subscribe-btn');
+
+    if (loginBtn) {
+        loginBtn.addEventListener('click', () => {
+            console.log('Login clicked');
+
+            alert('Login functionality would be implemented here');
+        });
+    }
+
+    if (newsletterBtn) {
+        newsletterBtn.addEventListener('click', () => {
+            console.log('Newsletter clicked');
+
+            alert('Newsletter signup would be implemented here');
+        });
+    }
+
+    if (subscribeBtn) {
+        subscribeBtn.addEventListener('click', () => {
+            console.log('Subscribe clicked');
+
+            alert('Subscription functionality would be implemented here');
+        });
+    }
+
+
     updateTimeline();
 
-    // Start at day 1
+
     updateProgress();
 
-    console.log("✅ Ready! Use mouse wheel or arrow keys to progress through the 8 days.");
-    console.log("   Scroll down = progress forward, Scroll up = go backward");
+    console.log("Ready! Use mouse wheel, arrow keys, or timeline to progress through the 8 days.");
+    console.log("Scroll down = progress forward, Scroll up = go backward");
+    console.log("Click timeline circles to jump to specific days");
 }
 
-// Start after a brief delay
+
 setTimeout(() => {
     init();
 }, 500);
