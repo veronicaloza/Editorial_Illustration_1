@@ -308,7 +308,7 @@ function updateProgress() {
 
 
     if (day !== currentDay) {
-        console.log(`📅 Progress to Day ${day} (${virtualScrollPosition.toFixed(1)}% virtual scroll)`);
+        console.log(`Progress to Day ${day} (${virtualScrollPosition.toFixed(1)}% virtual scroll)`);
         currentDay = day;
         updateTimeline();
 
