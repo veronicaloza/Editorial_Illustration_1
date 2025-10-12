@@ -32,37 +32,24 @@ setTimeout(() => {
 }, 100);
 
 const randomPhrases = [
-    "Human Design blends astrology, I Ching, Kabbalah, and chakras.",
-
-    "Followers claim sleeping alone preserves one's aura.",
-
-    "Day, a former surfer turned coach, embraced it after hitting rock bottom.",
-
-    "He was told he's a 'projector' — meant to follow intuition, not hustle.",
-
-    "Human Design offers five types: manifestors, generators, manifesting generators, projectors, and reflectors.",
-
-    "Followers credit it with self‑discovery; critics note its cult‑like edges.",
-
-    "It's booming on social media, spawning coaches, retreats, and high‑priced readings.",
-
-    "Some make drastic life changes — divorces, moves, isolation — to 'decondition.'",
-
-    "Practitioners warn of 'not‑self conditioning forces' causing frustration or bitterness.",
-
-    "Founder Ra Uru Hu (born Robert Krakower) claimed revelations from a mysterious 'voice' in 1987 on Ibiza.",
-
-    "He created the system's charts and wrote The Black Book.",
-
-    "Prophecies include new 'nonhuman' children arriving after 2027.",
-
-    "Supporters describe it as 'endless knowledge' and a way to find authentic identity.",
-
-    "Critics see commercialism and manipulation: a 'Wild West' industry.",
-
-    "Day earns income giving $250 readings yet warns against rigid dogma.",
-
-    "The author's own reading labels them a 'manifesting generator' urged to preserve their aura—perhaps, still open to love.",
+    "White room. Breathing walls. Sound thick as water.",
+    "In 1987, Ra Uru Hu—then Robert Krakower—disappeared into the quiet of Ibiza.",
+    "A cold voice vibrates behind his skull, neither inside nor out.",
+    "He later claimed it lasted eight nights—an initiation through chemistry and chaos.",
+    "Symbols unfold: stars wired to chakras, codes pulsing with strange geometry.",
+    "When it ends, his desk glows with charts and cryptic diagrams.",
+    "Gravity unhooks. The sea of Ibiza hums in fractals.",
+    "He calls it a transmission, not a hallucination—a map for evolution.",
+    "He writes as if possessed, sketching blueprints of human mechanics.",
+    "The Voice whispers: 'You’re designed. Not random.'",
+    "He dissolves. Ego thins. Only frequency remains.",
+    "Morning breaks like data streaming through dawn.",
+    "Five archetypes appear: generators, projectors, reflectors, hybrids, and initiators.",
+    "Critics call it madness; seekers call it revelation.",
+    "He dreams again—atoms rearranging like patient code.",
+    "He wakes certain: consciousness runs on circuitry and myth.",
+    "Years later, his words echo through apps and quiet retreats.",
+    "And still, that Voice lingers—calm, impossible, listening back."
 ];
 
 const randomContainer = document.getElementById("random-text-container");
@@ -70,7 +57,8 @@ const randomContainer = document.getElementById("random-text-container");
 let phraseIndex = 0;
 let currentDay = 1;
 let textElements = [];
-let virtualScrollPosition = 0;
+let scrollProgress = 0;
+let completionLogged = false;
 
 const floatingClasses = ['floating', 'floating-alt1', 'floating-alt2'];
 const textColors = ['#BFD5F3', '#DFE6F6', '#FDE8DF'];
@@ -274,13 +262,13 @@ function addDayTransitionEffect(day) {
 
 function getTargetTextsForPosition(scrollPercent) {
 
-    scrollPercent = Math.max(0, Math.min(100, scrollPercent));
+    scrollPercent = Math.max(0, scrollPercent);
+
+    // Map 0-400% scroll to days 1-8 (each day is 50% now)
+    const day = Math.min(8, Math.max(1, Math.floor(scrollPercent / 50) + 1));
 
 
-    const day = Math.min(8, Math.max(1, Math.floor(scrollPercent / 12.5) + 1));
-
-
-    const dayProgress = (scrollPercent % 12.5) / 12.5;
+    const dayProgress = (scrollPercent % 50) / 50;
 
 
     const textsPerDay = [0, 5, 15, 35, 65, 110, 170, 250, 350];
@@ -301,78 +289,106 @@ function getTargetTextsForPosition(scrollPercent) {
 }
 
 function updateProgress() {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const windowHeight = window.innerHeight;
 
-    const { targetTotal, day, prevDayTexts, currentDayTexts } = getTargetTextsForPosition(virtualScrollPosition);
+    // Days 1-8 span from 0-400% of scroll (4 viewports)
+    // Article appears after 400% (image reveals)
+    scrollProgress = Math.min(400, (scrollTop / windowHeight) * 100);
+
+    // Calculate total scroll percentage (beyond 400%)
+    const totalScrollPercent = (scrollTop / windowHeight) * 100;
+
+    // Show completion message when Day 8 is done (at 400% scroll)
+    if (scrollProgress >= 400 && currentDay === 8 && !completionLogged) {
+        console.log("✓ All 8 days complete! Keep scrolling to reveal the image...");
+        completionLogged = true;
+    } else if (scrollProgress < 400) {
+        completionLogged = false;
+    }
+
+    // Start fading everything after 400% scroll (after Day 8 completes)
+    const animationSection = document.getElementById('animation-section');
+    const fixedElements = [
+        document.querySelector('.line'),
+        document.querySelector('.main-title'),
+        document.querySelector('.subtitle'),
+        document.querySelector('.image-container'),
+        document.querySelector('.horizontal-line-1'),
+        document.querySelector('.horizontal-line-2'),
+        document.querySelector('.sub-navigation'),
+        document.querySelector('.vertical-timeline')
+    ];
+
+    if (totalScrollPercent > 400) {
+        // Fade from 400% to 450% scroll (0.5 viewport for smooth transition)
+        const fadeAmount = Math.min(1, (totalScrollPercent - 400) / 50);
+
+        // Fade animation section
+        if (animationSection) {
+            animationSection.style.opacity = 1 - fadeAmount;
+        }
+
+        // Fade all fixed elements
+        fixedElements.forEach(element => {
+            if (element) {
+                element.style.opacity = 1 - fadeAmount;
+            }
+        });
+    } else {
+        // Reset opacity when scrolling back up
+        if (animationSection) {
+            animationSection.style.opacity = 1;
+        }
+
+        fixedElements.forEach(element => {
+            if (element) {
+                element.style.opacity = 1;
+            }
+        });
+    }
+
+    const { targetTotal, day, prevDayTexts, currentDayTexts } = getTargetTextsForPosition(scrollProgress);
 
     const previousDay = currentDay;
 
 
     if (day !== currentDay) {
-        console.log(`Progress to Day ${day} (${virtualScrollPosition.toFixed(1)}% virtual scroll)`);
+        console.log(`Progress to Day ${day} (${scrollProgress.toFixed(1)}% scroll progress)`);
         currentDay = day;
         updateTimeline();
 
-
         addDayTransitionEffect(day);
 
-
-        const oldestDayToKeep = Math.max(1, currentDay - 1);
-        for (let d = 1; d < oldestDayToKeep; d++) {
-            removeTextsFromDay(d);
-        }
-
-
+        // Only remove texts when scrolling backwards
         if (day < previousDay) {
             for (let d = day + 1; d <= 8; d++) {
                 removeTextsFromDay(d);
             }
         }
+        // When moving forward, keep all previous day texts on screen
     }
 
     const currentTotal = textElements.length;
     const difference = targetTotal - currentTotal;
 
     if (difference > 0) {
-
+        // Add new texts as we progress
         const batchSize = Math.min(8, difference);
         for (let i = 0; i < batchSize; i++) {
             createRandomText();
         }
-        console.log(`Day ${currentDay}: Added ${batchSize} texts (${currentTotal} → ${textElements.length}/${targetTotal}) [Prev: ${prevDayTexts}, Curr: ${currentDayTexts}]`);
-    } else if (difference < 0) {
-
+        console.log(`Day ${currentDay}: Added ${batchSize} texts (total: ${textElements.length}/${targetTotal})`);
+    } else if (difference < 0 && currentDay < previousDay) {
+        // Only remove texts when scrolling backwards
         const batchSize = Math.min(8, Math.abs(difference));
         for (let i = 0; i < batchSize; i++) {
             removeOldestText();
         }
-        console.log(`Day ${currentDay}: Removed ${batchSize} texts (${currentTotal} → ${textElements.length}/${targetTotal}) [Prev: ${prevDayTexts}, Curr: ${currentDayTexts}]`);
+        console.log(`Day ${currentDay}: Removed ${batchSize} texts (scrolling back)`);
     }
 }
 
-
-function onWheel(event) {
-    event.preventDefault();
-
-
-    let delta = event.deltaY || event.detail || event.wheelDelta;
-
-
-    if (event.deltaMode === 1) {
-        delta *= 33;
-    } else if (event.deltaMode === 2) {
-        delta *= 100;
-    }
-
-
-    const scrollSpeed = 4;
-    virtualScrollPosition += (delta * scrollSpeed) / 100;
-
-
-    virtualScrollPosition = Math.max(0, Math.min(100, virtualScrollPosition));
-
-
-    updateProgress();
-}
 
 let updateTimeout;
 function throttledUpdate() {
@@ -380,66 +396,28 @@ function throttledUpdate() {
         updateTimeout = setTimeout(() => {
             updateProgress();
             updateTimeout = null;
-        }, 50);
+        }, 16);
     }
 }
 
 
 function handleNavigationClick(day) {
+    const windowHeight = window.innerHeight;
+    // Each day is now 50% of scroll (400% / 8 days)
+    const targetScrollPercent = (day - 1) * 50;
+    const targetScrollPosition = (targetScrollPercent / 100) * windowHeight;
 
-    const targetScrollPosition = (day - 1) * 12.5;
-    const startPosition = virtualScrollPosition;
-    const distance = targetScrollPosition - startPosition;
-    const duration = 1000;
-    const startTime = Date.now();
-
-    function animateTransition() {
-        const elapsed = Date.now() - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-
-
-        const easeInOutCubic = progress < 0.5
-            ? 4 * progress * progress * progress
-            : 1 - Math.pow(-2 * progress + 2, 3) / 2;
-
-        virtualScrollPosition = startPosition + (distance * easeInOutCubic);
-        updateProgress();
-
-        if (progress < 1) {
-            requestAnimationFrame(animateTransition);
-        }
-    }
-
-    animateTransition();
+    window.scrollTo({
+        top: targetScrollPosition,
+        behavior: 'smooth'
+    });
 }
 
 
 function init() {
-    console.log("Initializing wheel-based animation...");
+    console.log("Initializing scroll-based animation...");
 
-
-    window.addEventListener('wheel', onWheel, { passive: false });
-
-
-    window.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowDown' || e.key === 'PageDown') {
-            e.preventDefault();
-            virtualScrollPosition = Math.min(100, virtualScrollPosition + 2);
-            throttledUpdate();
-        } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
-            e.preventDefault();
-            virtualScrollPosition = Math.max(0, virtualScrollPosition - 2);
-            throttledUpdate();
-        } else if (e.key === 'Home') {
-            e.preventDefault();
-            virtualScrollPosition = 0;
-            throttledUpdate();
-        } else if (e.key === 'End') {
-            e.preventDefault();
-            virtualScrollPosition = 100;
-            throttledUpdate();
-        }
-    });
+    window.addEventListener('scroll', throttledUpdate, { passive: true });
 
 
     for (let i = 1; i <= 8; i++) {
@@ -486,8 +464,9 @@ function init() {
 
     updateProgress();
 
-    console.log("Ready! Use mouse wheel, arrow keys, or timeline to progress through the 8 days.");
-    console.log("   Scroll down = progress forward, Scroll up = go backward");
+    console.log("Ready! Scroll down to progress through the 8 days.");
+    console.log("   Days 1-8 span 0-400% scroll (4 viewports)");
+    console.log("   Image reveals after 400% scroll");
     console.log("   Click timeline circles to jump to specific days");
 }
 
