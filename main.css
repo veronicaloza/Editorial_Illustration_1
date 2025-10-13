@@ -56,7 +56,7 @@ body {
 
 .subtitle {
     position: fixed;
-    top: 150px;
+    top: 200px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 2090;
@@ -256,14 +256,6 @@ body {
         margin-left: 6px;
     }
 
-    .horizontal-line-1 {
-        top: 280px;
-    }
-
-    .horizontal-line-2 {
-        top: 80px;
-    }
-
     .login-icon {
         width: 22px;
         height: 22px;
@@ -374,39 +366,8 @@ body {
     height: 20px;
     border: 2px solid #fff;
     transition: all 0.1s ease;
-    border-radius: 20%;
     cursor: pointer;
 }
-
-#circle-1 {
-    border-radius: 20%;
-
-}
-
-#circle-2 {
-    border-radius: 20%;
-    rotate: 45deg;
-}
-
-#circle-8 {
-    border-radius: 20%;
-    rotate: 45deg;
-}
-
-
-#circle-3 {
-    border-radius: 20%;
-}
-
-#circle-4 {
-    border-radius: 50%;
-}
-
-#circle-6 {
-    border-radius: 50%;
-}
-
-
 
 .circle:hover {
     transform: scale(1.1);
