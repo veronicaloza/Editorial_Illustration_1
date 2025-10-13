@@ -24,7 +24,9 @@ const animationSection = document.getElementById('animation-section');
 const rulerProgress = document.querySelector('.ruler-progress');
 
 const fadeOutElements = [
-    // Title, subtitle, and ruler navigation are commented out
+    document.querySelector('.main-title'),
+    document.querySelector('.subtitle'),
+    document.querySelector('.ruler-navigation')
 ];
 
 const persistentElements = [
@@ -122,22 +124,14 @@ function createRandomText() {
     const lineRect = horizontalLine2.getBoundingClientRect();
 
     const contentAreaTop = lineRect.bottom + 20;
-    const contentAreaBottom = window.innerHeight - 100; // More space for text height
-    const contentAreaLeft = 10;
-    const contentAreaRight = window.innerWidth - 10;
+    const contentAreaBottom = Math.min(window.innerHeight, 2048) - 50;
+    const contentAreaLeft = 20;
+    const contentAreaRight = Math.min(window.innerWidth, 2048) - 20;
 
-    // Horizontal density gradient: less text on left, much more on right
-    // Use power distribution to concentrate text toward right
-    const horizontalRandom = Math.pow(Math.random(), 0.4); // Lower power = more right-heavy
-    const x = contentAreaLeft + (horizontalRandom * (contentAreaRight - contentAreaLeft - 350));
+    const x = Math.random() * (contentAreaRight - contentAreaLeft - 300) + contentAreaLeft;
+    const y = Math.random() * (contentAreaBottom - contentAreaTop - 100) + contentAreaTop;
 
-    // Ensure text stays within viewport height (accounting for text height)
-    const maxTextHeight = 100; // Approximate max height for text element
-    const y = Math.random() * (contentAreaBottom - contentAreaTop - maxTextHeight) + contentAreaTop;
-
-    // Text size increases from left to right
-    const horizontalPosition = (x - contentAreaLeft) / (contentAreaRight - contentAreaLeft);
-    const fontSize = 15 + (horizontalPosition * 35); // Size ranges from 15px (left) to 50px (right)
+    const fontSize = Math.random() * 30 + 10;
 
     const randomColor = textColors[Math.floor(Math.random() * textColors.length)];
 
@@ -149,11 +143,6 @@ function createRandomText() {
     textElement.style.textAlign = 'center';
     textElement.style.whiteSpace = 'normal';
     textElement.style.wordWrap = 'break-word';
-
-    // Add random animation delays for trippy wave effect
-    const colorDelay = Math.random() * 15;
-    const glowDelay = Math.random() * 4;
-    textElement.style.animationDelay = `${glowDelay}s, ${colorDelay}s`;
 
     randomContainer.appendChild(textElement);
     textElements.push(textElement);
@@ -361,7 +350,12 @@ function handleNavigationClick(day) {
 function init() {
     window.addEventListener('scroll', throttledUpdate, { passive: true });
 
-    // Ruler markers are commented out in HTML
+    document.querySelectorAll('.ruler-marker').forEach((marker) => {
+        marker.addEventListener('click', () => {
+            const day = parseInt(marker.dataset.day);
+            handleNavigationClick(day);
+        });
+    });
 
     updateRulerNavigation();
     updateProgress();

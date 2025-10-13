@@ -489,11 +489,11 @@ body {
 
 .random-text.show {
     opacity: 1;
-    animation: glow-pulse 4s ease-in-out infinite alternate;
+    animation: glow-pulse 3s ease-in-out infinite alternate;
 }
 
 .random-text.corrupted {
-    animation: glow-pulse 4s ease-in-out infinite alternate, text-glitch 0.3s infinite, trippy-blur 10s ease-in-out infinite;
+    animation: glow-pulse 3s ease-in-out infinite alternate, text-glitch 0.3s infinite;
 }
 
 @keyframes text-glitch {
@@ -530,93 +530,16 @@ body {
         text-shadow:
             0 0 2px currentColor,
             0 0 4px currentColor,
-            0 0 6px currentColor,
-            0 0 10px currentColor;
-        filter: brightness(1.1) blur(0px);
-    }
-
-    50% {
-        text-shadow:
-            0 0 5px currentColor,
-            0 0 10px currentColor,
-            0 0 15px currentColor,
-            0 0 20px currentColor;
-        filter: brightness(1.3) blur(0.3px);
+            0 0 6px currentColor;
+        filter: brightness(1.1);
     }
 
     100% {
         text-shadow:
-            0 0 2px currentColor,
-            0 0 4px currentColor,
+            0 0 3px currentColor,
             0 0 6px currentColor,
-            0 0 10px currentColor;
-        filter: brightness(1.1) blur(0px);
-    }
-}
-
-@keyframes trippy-blur {
-
-    0%,
-    100% {
-        filter: blur(0px) contrast(1);
-        transform: scale(1);
-    }
-
-    25% {
-        filter: blur(0.5px) contrast(1.2);
-        transform: scale(1.02);
-    }
-
-    50% {
-        filter: blur(1px) contrast(1.4);
-        transform: scale(1.05);
-    }
-
-    75% {
-        filter: blur(0.5px) contrast(1.2);
-        transform: scale(1.02);
-    }
-}
-
-@keyframes color-shift {
-    0% {
-        color: #0212EE;
-        filter: hue-rotate(0deg) saturate(1);
-    }
-
-    14% {
-        color: #5B8CFF;
-        filter: hue-rotate(15deg) saturate(1.2);
-    }
-
-    28% {
-        color: #D1FE01;
-        filter: hue-rotate(30deg) saturate(1.3);
-    }
-
-    42% {
-        color: #FEC6E9;
-        filter: hue-rotate(45deg) saturate(1.1);
-    }
-
-    56% {
-        color: #FF1B99;
-        filter: hue-rotate(60deg) saturate(1.4);
-    }
-
-    70% {
-        color: #F3F3E9;
-        filter: hue-rotate(30deg) saturate(0.9);
-    }
-
-    84% {
-        color: #32FE6B;
-        filter: hue-rotate(15deg) saturate(1.2);
-    }
-
-    100% {
-        color: #0212EE;
-        filter: hue-rotate(0deg) saturate(1);
+            0 0 9px currentColor;
+        filter: brightness(1.2);
     }
 }
 
