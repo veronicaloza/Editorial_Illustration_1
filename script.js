@@ -19,81 +19,42 @@ const randomPhrases = [
     "And still, that Voice lingers—calm, impossible, listening back."
 ];
 
+// Cache DOM elements
 const randomContainer = document.getElementById("random-text-container");
 const animationSection = document.getElementById('animation-section');
 const rulerProgress = document.querySelector('.ruler-progress');
-
-const fadeOutElements = [
+const fixedElements = [
+    document.querySelector('.line'),
     document.querySelector('.main-title'),
     document.querySelector('.subtitle'),
+    document.querySelector('.image-container'),
+    document.querySelector('.horizontal-line-2'),
+    document.querySelector('.sub-navigation'),
     document.querySelector('.ruler-navigation')
 ];
 
-const persistentElements = [
-    document.querySelector('.horizontal-line-2'),
-    document.querySelector('.sub-navigation')
-];
-
+// State variables
 let phraseIndex = 0;
 let currentDay = 1;
 let textElements = [];
 let scrollProgress = 0;
+let completionLogged = false;
 
-
+// Configuration
 const floatingClasses = ['floating', 'floating-alt1', 'floating-alt2'];
 const textColors = ['#0212EE', '#D1FE01', '#FEC6E9', '#FF1B99', '#F3F3E9', '#32FE6B'];
-
-
-const corruptChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?~`';
-const glitchChars = '█▓▒░▀▄▌▐■□▪▫◘◙◚◛◜◝◞◟◠◡◢◣◤◥';
-
-function corruptText(text, day) {
-
-    const corruptionRate = ((day - 1) / 7) * 0.55 + 0.05;
-
-    let corrupted = '';
-    const words = text.split(' ');
-
-    words.forEach((word, wordIndex) => {
-        let corruptedWord = '';
-        for (let i = 0; i < word.length; i++) {
-            const char = word[i];
-
-
-            if (/[.!?,;:]/.test(char)) {
-                corruptedWord += char;
-                continue;
-            }
-
-
-            if (Math.random() < corruptionRate) {
-
-                const useGlitch = Math.random() > 0.5 && day >= 4;
-                const charSet = useGlitch ? glitchChars : corruptChars;
-                corruptedWord += charSet[Math.floor(Math.random() * charSet.length)];
-            } else {
-                corruptedWord += char;
-            }
-        }
-
-        corrupted += corruptedWord;
-        if (wordIndex < words.length - 1) corrupted += ' ';
-    });
-
-    return corrupted;
-}
 
 function typewriterEffect(element, text, speed = 50) {
     element.textContent = '';
     element.classList.add('typing');
 
-
+    // Split text into words
     const words = text.split(' ');
     let i = 0;
 
     function typeWord() {
         if (i < words.length) {
-
+            // Add the word and a space (except for the last word)
             element.textContent += words[i] + (i < words.length - 1 ? ' ' : '');
             i++;
 
@@ -111,22 +72,25 @@ function typewriterEffect(element, text, speed = 50) {
 }
 
 function createRandomText() {
+    console.log("Creating random text...", textElements.length, "elements currently");
+
     const textElement = document.createElement('div');
     textElement.className = 'random-text';
     textElement.textContent = '';
+    textElement.createdAt = Date.now();
     textElement.day = currentDay;
+    const phraseToType = randomPhrases[phraseIndex];
 
-
-    const originalPhrase = randomPhrases[phraseIndex];
-    const phraseToType = corruptText(originalPhrase, currentDay);
 
     const horizontalLine2 = document.querySelector('.horizontal-line-2');
     const lineRect = horizontalLine2.getBoundingClientRect();
+
 
     const contentAreaTop = lineRect.bottom + 20;
     const contentAreaBottom = Math.min(window.innerHeight, 2048) - 50;
     const contentAreaLeft = 20;
     const contentAreaRight = Math.min(window.innerWidth, 2048) - 20;
+
 
     const x = Math.random() * (contentAreaRight - contentAreaLeft - 300) + contentAreaLeft;
     const y = Math.random() * (contentAreaBottom - contentAreaTop - 100) + contentAreaTop;
@@ -147,25 +111,12 @@ function createRandomText() {
     randomContainer.appendChild(textElement);
     textElements.push(textElement);
 
-
-    const shouldBeVisible = currentDay >= textElement.day;
-
     setTimeout(() => {
-        if (shouldBeVisible) {
-            textElement.classList.add('show');
-
-            if (currentDay >= 4) {
-                textElement.classList.add('corrupted');
-            }
-        } else {
-            textElement.classList.add('hidden');
-            textElement.style.opacity = '0';
-            textElement.style.pointerEvents = 'none';
-        }
+        textElement.classList.add('show');
 
         typewriterEffect(textElement, phraseToType, 30 + Math.random() * 40);
 
-        const typingDuration = phraseToType.split(' ').length * (30 + 20);
+        const typingDuration = phraseToType.length * (30 + 20);
         setTimeout(() => {
             const randomFloatingClass = floatingClasses[Math.floor(Math.random() * floatingClasses.length)];
             textElement.classList.add(randomFloatingClass);
@@ -175,45 +126,34 @@ function createRandomText() {
     phraseIndex = (phraseIndex + 1) % randomPhrases.length;
 }
 
-function updateTextVisibility() {
+// Removed - no longer needed as we keep all text elements
 
-    const toShow = [];
-    const toHide = [];
+function hideTextsFromDay(dayToHide) {
+    const textsToHide = textElements.filter(el => el.day === dayToHide);
 
-
-    textElements.forEach(textElement => {
-        if (!textElement) return;
-
-        const shouldBeVisible = textElement.day <= currentDay;
-        const isCurrentlyHidden = textElement.classList.contains('hidden');
-
-        if (shouldBeVisible && isCurrentlyHidden) {
-            toShow.push(textElement);
-        } else if (!shouldBeVisible && !isCurrentlyHidden) {
-            toHide.push(textElement);
+    textsToHide.forEach(textElement => {
+        if (textElement && !textElement.classList.contains('hidden')) {
+            textElement.style.opacity = '0';
+            textElement.style.pointerEvents = 'none';
+            textElement.classList.add('hidden');
         }
     });
+}
 
+function showTextsForDay(dayToShow) {
+    const textsToShow = textElements.filter(el => el.day === dayToShow);
 
-    if (toShow.length > 0 || toHide.length > 0) {
-        requestAnimationFrame(() => {
-            toShow.forEach(el => {
-                el.classList.remove('hidden');
-                el.style.opacity = '1';
-                el.style.pointerEvents = 'auto';
-            });
-
-            toHide.forEach(el => {
-                el.classList.add('hidden');
-                el.style.opacity = '0';
-                el.style.pointerEvents = 'none';
-            });
-        });
-    }
+    textsToShow.forEach(textElement => {
+        if (textElement && textElement.classList.contains('hidden')) {
+            textElement.style.opacity = '1';
+            textElement.style.pointerEvents = 'auto';
+            textElement.classList.remove('hidden');
+        }
+    });
 }
 
 function updateRulerNavigation() {
-
+    // Update ruler markers
     const markers = document.querySelectorAll('.ruler-marker');
     markers.forEach((marker, index) => {
         const day = index + 1;
@@ -226,7 +166,7 @@ function updateRulerNavigation() {
         }
     });
 
-
+    // Update progress bar
     if (rulerProgress) {
         const progressPercent = ((currentDay - 1) / 7) * 100;
         rulerProgress.style.width = `${progressPercent}%`;
@@ -268,6 +208,7 @@ function addDayTransitionEffect(day) {
     }
 }
 
+
 function getTargetTextsForPosition(scrollPercent) {
     scrollPercent = Math.max(0, scrollPercent);
     const day = Math.min(8, Math.max(1, Math.floor(scrollPercent / 50) + 1));
@@ -287,41 +228,56 @@ function updateProgress() {
 
     scrollProgress = Math.min(450, totalScrollPercent);
 
-    if (totalScrollPercent > 400) {
-        const fadeAmount = Math.min(1, (totalScrollPercent - 400) / 10);
-
-        if (animationSection) animationSection.style.opacity = 1 - fadeAmount;
-        fadeOutElements.forEach(el => el && (el.style.opacity = 1 - fadeAmount));
-
-        persistentElements.forEach(el => el && (el.style.opacity = 1));
-
-
-    } else {
-        if (animationSection) animationSection.style.opacity = 1;
-        fadeOutElements.forEach(el => el && (el.style.opacity = 1));
-        persistentElements.forEach(el => el && (el.style.opacity = 1));
+    // Completion logging
+    if (scrollProgress >= 400 && currentDay === 8 && !completionLogged) {
+        console.log("✓ All 8 days complete! Keep scrolling to reveal the image...");
+        completionLogged = true;
+    } else if (scrollProgress < 400) {
+        completionLogged = false;
     }
 
+    // Fade all elements after 400% scroll
+    if (totalScrollPercent > 400) {
+        const fadeAmount = Math.min(1, (totalScrollPercent - 400) / 50);
 
-    if (totalScrollPercent <= 400) {
-        const { targetTotal, day } = getTargetTextsForPosition(scrollProgress);
+        if (animationSection) animationSection.style.opacity = 1 - fadeAmount;
+        fixedElements.forEach(el => el && (el.style.opacity = 1 - fadeAmount));
+    } else {
+        if (animationSection) animationSection.style.opacity = 1;
+        fixedElements.forEach(el => el && (el.style.opacity = 1));
+    }
 
-        if (day !== currentDay) {
-            currentDay = day;
-            updateRulerNavigation();
-            addDayTransitionEffect(day);
+    const { targetTotal, day } = getTargetTextsForPosition(scrollProgress);
+    const previousDay = currentDay;
 
-            updateTextVisibility();
-        }
+    // Update day and navigation
+    if (day !== currentDay) {
+        currentDay = day;
+        updateRulerNavigation();
+        addDayTransitionEffect(day);
 
-        const currentTotal = textElements.length;
-        const difference = targetTotal - currentTotal;
-
-        if (difference > 0) {
-            const batchSize = Math.min(8, difference);
-            for (let i = 0; i < batchSize; i++) {
-                createRandomText();
+        // Hide texts when scrolling backwards
+        if (day < previousDay) {
+            for (let d = day + 1; d <= 8; d++) {
+                hideTextsFromDay(d);
             }
+        }
+        // Show texts when scrolling forwards
+        else if (day > previousDay) {
+            for (let d = previousDay + 1; d <= day; d++) {
+                showTextsForDay(d);
+            }
+        }
+    }
+
+    // Only create new texts if we don't have enough total (never created before)
+    const currentTotal = textElements.length;
+    const difference = targetTotal - currentTotal;
+
+    if (difference > 0) {
+        const batchSize = Math.min(8, difference);
+        for (let i = 0; i < batchSize; i++) {
+            createRandomText();
         }
     }
 }
@@ -348,8 +304,12 @@ function handleNavigationClick(day) {
 }
 
 function init() {
+    console.log("Initializing scroll-based animation...");
+
+    // Scroll event listener
     window.addEventListener('scroll', throttledUpdate, { passive: true });
 
+    // Ruler navigation click handlers
     document.querySelectorAll('.ruler-marker').forEach((marker) => {
         marker.addEventListener('click', () => {
             const day = parseInt(marker.dataset.day);
@@ -357,10 +317,17 @@ function init() {
         });
     });
 
+    // Initialize navigation and progress
     updateRulerNavigation();
     updateProgress();
+
+    console.log("Ready! Scroll down to progress through the 8 days.");
+    console.log("   Days 1-8 span 0-400% scroll (4 viewports)");
+    console.log("   Image reveals after 400% scroll");
+    console.log("   Click ruler markers to jump to specific days");
 }
 
+// Initialize after DOM is ready
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
 } else {

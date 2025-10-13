@@ -17,9 +17,20 @@ body {
     margin: 0;
     padding: 0;
     width: 100%;
-    background-color: #ffffff;
+    background-color: #000;
     position: relative;
     overflow-x: hidden;
+}
+
+.line {
+    position: fixed;
+    top: 10px;
+    left: 30px;
+    height: 4px;
+    width: 400px;
+    border-bottom: 2px solid #fff;
+    z-index: 2100;
+    transition: opacity 0.5s ease;
 }
 
 .main-title {
@@ -31,14 +42,13 @@ body {
     text-align: center;
     width: 80%;
     max-width: 1200px;
-    transition: opacity 0.5s ease-in-out;
+    transition: opacity 0.5s ease;
 }
 
 .main-title h1 {
     color: #fff;
     font-family: "oculi-display", sans-serif;
-    font-weight: 900;
-    font-style: normal;
+    font-weight: 700;
     font-size: 2em;
     margin: 0;
     padding: 60px 0 0 0;
@@ -51,7 +61,7 @@ body {
     transform: translateX(-50%);
     z-index: 2090;
     width: 70%;
-    transition: opacity 0.5s ease-in-out;
+    transition: opacity 0.5s ease;
 }
 
 .subtitle h2 {
@@ -67,18 +77,9 @@ body {
     position: fixed;
     z-index: 2080;
     text-align: center;
-    top: 0px;
+    top: 2px;
     left: 0px;
-    transition: opacity 0.5s ease-in-out;
-}
-
-.lines {
-    position: fixed;
-    z-index: 2080;
-    color: #fff;
-    font-size: 40px;
-    top: 18px;
-    left: 8px;
+    transition: opacity 0.5s ease;
 }
 
 .main-image {
@@ -93,6 +94,11 @@ body {
     height: 0.5px;
     z-index: 2070;
     transition: opacity 0.5s ease;
+}
+
+.horizontal-line-1 {
+    top: 350px;
+    background-color: transparent;
 }
 
 .horizontal-line-2 {
@@ -130,7 +136,10 @@ body {
     width: 30px;
     height: 30px;
     filter: brightness(0) invert(1);
+
 }
+
+
 
 @media (max-width: 1919px) and (min-width: 1200px) {
     .main-title h1 {
@@ -186,19 +195,16 @@ body {
     }
 
     .day-label {
-        font-size: 10px;
+        font-size: 9px;
         margin-left: 8px;
     }
 
+    .horizontal-line-1 {
+        top: 320px;
+    }
 
     .horizontal-line-2 {
         top: 100px;
-    }
-
-    .lines {
-        font-size: 32px;
-        top: 15px;
-        left: 6px;
     }
 
     .login-icon {
@@ -250,17 +256,12 @@ body {
         margin-left: 6px;
     }
 
-    .lines {
-        font-size: 28px;
-        top: 14px;
-        left: 5px;
-    }
-
     .login-icon {
         width: 22px;
         height: 22px;
     }
 }
+
 
 @media (max-width: 479px) {
     .main-title h1 {
@@ -305,14 +306,12 @@ body {
         margin-left: 4px;
     }
 
-    .horizontal-line-2 {
-        top: 70px;
+    .horizontal-line-1 {
+        top: 250px;
     }
 
-    .lines {
-        font-size: 24px;
-        top: 12px;
-        left: 5px;
+    .horizontal-line-2 {
+        top: 70px;
     }
 
     .login-icon {
@@ -321,92 +320,37 @@ body {
     }
 }
 
-.ruler-navigation {
+
+.vertical-timeline {
     position: fixed;
-    left: 50%;
-    bottom: 40px;
-    transform: translateX(-50%);
-    width: 400px;
-    height: 60px;
+    left: 30px;
+    top: 60%;
+    transform: translateY(-50%);
     z-index: 2500;
-    transition: opacity 0.5s ease-in-out;
+    height: 400px;
+    pointer-events: auto;
+    transition: opacity 0.5s ease;
 }
 
-.ruler-line {
-    position: absolute;
-    top: 15px;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: rgba(168, 168, 168, 0.3);
-}
-
-.ruler-markers {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-}
-
-.ruler-marker {
+.timeline-circles-vertical {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-    cursor: pointer;
-    transition: transform 0.2s ease;
+    height: 100%;
 }
 
-.ruler-marker:hover {
-    transform: translateY(-3px);
-}
-
-.marker-tick {
-    width: 2px;
-    height: 15px;
-    background: #fff;
-    margin-bottom: 8px;
+.timeline-item-vertical {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 8px 0;
     transition: all 0.3s ease;
+    cursor: pointer;
 }
 
-.ruler-marker.active .marker-tick {
-    height: 25px;
-    background: #fff;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-}
-
-.ruler-marker.completed .marker-tick {
-    height: 20px;
-    background: rgba(255, 255, 255, 0.8);
-}
-
-.marker-label {
-    color: #fff;
-    font-family: "oculi-display", sans-serif;
-    font-weight: 400;
-    font-size: 15px;
-    opacity: 0.7;
-    transition: opacity 0.3s ease;
-}
-
-.ruler-marker.active .marker-label,
-.ruler-marker:hover .marker-label {
-    opacity: 1;
-    font-weight: 600;
-}
-
-.ruler-progress {
-    position: absolute;
-    top: 15px;
-    left: 0;
-    height: 2px;
-    background: #fff;
-    width: 0%;
-    transition: width 0.1s linear;
-    box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+.timeline-item-vertical:hover {
+    transform: translateX(5px);
 }
 
 .article-image {
@@ -417,39 +361,37 @@ body {
     padding: 0;
 }
 
-@media (max-width: 768px) {
-    .ruler-navigation {
-        width: 300px;
-        bottom: 30px;
-    }
-
-    .marker-label {
-        font-size: 10px;
-    }
-
-    .marker-tick {
-        height: 12px;
-    }
-
-    .ruler-marker.active .marker-tick {
-        height: 20px;
-    }
-
-    .ruler-marker.completed .marker-tick {
-        height: 16px;
-    }
+.circle {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #fff;
+    transition: all 0.1s ease;
+    cursor: pointer;
 }
 
-@media (max-width: 480px) {
-    .ruler-navigation {
-        width: 250px;
-        bottom: 25px;
-    }
-
-    .marker-label {
-        font-size: 9px;
-    }
+.circle:hover {
+    transform: scale(1.1);
 }
+
+.circle.active {
+    background: #fff;
+    transform: scale(1.2);
+}
+
+.circle.completed {
+    background: #fff;
+}
+
+.day-label {
+    color: #fff;
+    font-family: "oculi-display", sans-serif;
+    font-weight: 400;
+    text-transform: uppercase;
+    font-size: 12px;
+    margin-left: 10px;
+}
+
+
 
 .random-container {
     position: absolute;
@@ -457,9 +399,10 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: #000000;
+    background: #000;
     pointer-events: none;
 }
+
 
 .random-text {
     position: absolute;
@@ -482,47 +425,9 @@ body {
     transform: translateZ(0);
 }
 
-.random-text.hidden {
-    opacity: 0 !important;
-    pointer-events: none !important;
-}
-
 .random-text.show {
     opacity: 1;
     animation: glow-pulse 3s ease-in-out infinite alternate;
-}
-
-.random-text.corrupted {
-    animation: glow-pulse 3s ease-in-out infinite alternate, text-glitch 0.3s infinite;
-}
-
-@keyframes text-glitch {
-
-    0%,
-    100% {
-        transform: translate(0, 0);
-        filter: brightness(1);
-    }
-
-    20% {
-        transform: translate(-1px, 1px);
-        filter: brightness(1.1);
-    }
-
-    40% {
-        transform: translate(1px, -1px);
-        filter: brightness(0.9);
-    }
-
-    60% {
-        transform: translate(-1px, -1px);
-        filter: brightness(1.05);
-    }
-
-    80% {
-        transform: translate(1px, 1px);
-        filter: brightness(0.95);
-    }
 }
 
 @keyframes glow-pulse {
@@ -642,20 +547,12 @@ body {
     height: 100vh;
     z-index: 1;
     pointer-events: none;
-    transition: opacity 0.5s ease-in-out;
+    transition: opacity 0.3s ease-out;
 }
 
-.tab {
-    position: fixed;
-    top: 0px;
-    width: 100%;
-    height: 80px;
-    background: #000;
-    z-index: 2048;
-}
 
 .scroll-spacer {
-    height: 450vh;
+    height: 400vh;
     width: 100%;
     background: transparent;
     position: relative;
@@ -675,4 +572,47 @@ body {
     width: 100%;
     margin: 0;
     padding: 0;
+    color: #000;
+    font-family: Georgia, 'Times New Roman', serif;
+    line-height: 1.8;
+}
+
+.article-title {
+    font-family: "oculi-display", sans-serif;
+    font-size: 2.5em;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 40px;
+    line-height: 1.2;
+    text-align: left;
+}
+
+.article-text {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 24px;
+    text-align: left;
+    font-weight: 400;
+}
+
+.article-end {
+    text-align: center;
+    font-style: italic;
+    font-size: 16px;
+    margin-top: 40px;
+    color: #666;
+}
+
+@media (max-width: 768px) {
+    .article-content {
+        padding: 60px 20px 80px;
+    }
+
+    .article-title {
+        font-size: 2em;
+    }
+
+    .article-text {
+        font-size: 16px;
+    }
 }
